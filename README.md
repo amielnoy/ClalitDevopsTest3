@@ -21,4 +21,12 @@
 
 8.Import the resources you deployed using Output
 
+ For creating the required resources on azure cloud account:
+ on the cmd :
+ 1.az login & complete the login to azure account
+ 2.git clone https://github.com/amielnoy/ClalitDevopsTest3
+ 3.terraform init
+ 4.terraform plan
+ 5.terraform apply
  
+ running the 
