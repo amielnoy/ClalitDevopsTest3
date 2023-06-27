@@ -29,4 +29,11 @@
  4.terraform plan
  5.terraform apply
  
- running the 
+ running the terraform SOLUTION:
+
+ 1.login to the azure cli 
+   using az login
+ 2.git clone  https://github.com/amielnoy/ClalitDevopsTest3.git
+ 3.on a teminal go to the root of the project
+ & run: terraform init
+ 4.run terraform apply
