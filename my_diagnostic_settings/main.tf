@@ -21,21 +21,30 @@ variable "virtual_network" {
   })
 }
 
+
 variable "storage_account_id" {
   description = "ID of the storage account to store diagnostic logs"
   type        = string
 }
 
 resource "azurerm_monitor_diagnostic_setting" "existing_monitor_diag" {
-  name               = "my-diagnostics-111"
-  target_resource_id = "/subscriptions/441b9518-6510-4fa6-9882-fa9d2d75513e/resourceGroups/amiel-resource-group2/providers/Microsoft.Network/virtualNetworks/amiel-vnet"
-  storage_account_id = "/subscriptions/441b9518-6510-4fa6-9882-fa9d2d75513e/resourceGroups/amiel-resource-group2/providers/Microsoft.Storage/storageAccounts/amielstorageaccount111"
+  name               = "my-diagnostics"
+  target_resource_id = var.virtual_network.id
 
-  metric {
-    category = "AllMetrics"
+  log {
+    category = "VMProtectionAlerts"
     enabled  = true
+
+    retention_policy {
+      enabled = false
+    }
   }
+
+  storage_account_id = var.storage_account_id
 }
+
+
+
 
 output "diagnostic_setting_id" {
   value = azurerm_monitor_diagnostic_setting.existing_monitor_diag.id
