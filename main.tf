@@ -1,5 +1,3 @@
-
-
 resource "azurerm_resource_group" "amiel_az_resource" {
   count = var.create_resource_group ? 1 : 0
 
@@ -15,7 +13,7 @@ resource "azurerm_virtual_network" "amiel_vpn" {
 }
 
 resource "azurerm_storage_account" "amiel_storage" {
-  name                     = "amielstorageaccount111"
+  name                     = "amielstorageaccount"
   resource_group_name      = azurerm_resource_group.amiel_az_resource[0].name
   location                 = azurerm_resource_group.amiel_az_resource[0].location
   account_tier             = "Standard"
@@ -78,9 +76,9 @@ resource "azurerm_role_assignment" "amiel_role_assignment" {
   principal_id         = azurerm_function_app.amiel_az_func_app.identity[0].principal_id
 }
 
-resource "azurerm_private_endpoint" "amiel_private_endpoint" {
+resource "azurerm_private_endpoint" "function_app_private_endpoint" {
   count                  = var.create_resource_group ? 1 : 0
-  name                  = "amiel-private-endpoint"
+  name                  = "func-app-private-endpoint"
   location              = azurerm_resource_group.amiel_az_resource[count.index].location
   resource_group_name   = azurerm_resource_group.amiel_az_resource[count.index].name
   subnet_id             = azurerm_subnet.amiel_subnet[count.index].id
@@ -117,14 +115,13 @@ resource "azurerm_private_endpoint" "storage_private_endpoint" {
   }
 }
 
+
+
+
 module "diagnostic_settings" {
   source                        = "./my_diagnostic_settings"
   enable_diagnostic_settings    = var.create_resource_group
   virtual_network_resource_group = azurerm_resource_group.amiel_az_resource[0]
   virtual_network               = azurerm_virtual_network.amiel_vpn
   storage_account_id            = azurerm_storage_account.amiel_storage.id
-}
-
-output "diagnostic_setting_id" {
-  value = module.diagnostic_settings.diagnostic_setting_id
 }
